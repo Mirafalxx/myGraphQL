@@ -2,6 +2,7 @@ import { ApolloServer } from "@apollo/server";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import { typeDefs } from "./models/typeDefs.js";
 import { resolvers } from "./graphql/resolvers/resolvers.js";
+import User from "./models/User.js";
 
 import mongoose from "mongoose";
 
@@ -16,6 +17,21 @@ const server = new ApolloServer({
 
 const { url } = await startStandaloneServer(server, {
   listen: { port: 4000 },
+  context: async ({ req, res }) => {
+    const token = req.headers.authorization || "";
+    try {
+      const user = await User.findOne({ token });
+      if (!user) {
+        throw new GraphQLError("User is not authenticated", {
+          extensions: {
+            code: "UNAUTHENTICATED",
+            http: { status: 401 },
+          },
+        });
+      }
+      return { user };
+    } catch (error) {}
+  },
 });
 
 console.log(`🚀  Server ready at: ${url}`);

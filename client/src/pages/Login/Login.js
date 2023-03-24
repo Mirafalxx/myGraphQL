@@ -19,8 +19,7 @@ const Login = () => {
   useEffect(() => {
     const loginData = async () => {
       if (data?.login) {
-        console.log(data?.login);
-        localStorage.setItem("info", JSON.stringify(data?.login));
+        localStorage.setItem("token", JSON.stringify(data?.login.token));
       }
     };
     loginData();

@@ -5,6 +5,7 @@ export const typeDefs = gql`
     hello(name: String): String
     books: [Book]
     getAllUsers: [User]
+    currentUser: User!
   }
   type Book {
     id: ID
