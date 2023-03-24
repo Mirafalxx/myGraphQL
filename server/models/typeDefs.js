@@ -30,5 +30,6 @@ export const typeDefs = gql`
     delete(id: ID): ID
     registerUser(email: String, password: String): User
     login(email: String, password: String): Login
+    logout: Boolean
   }
 `;

@@ -1,33 +1,32 @@
-import { ApolloProvider, InMemoryCache, ApolloClient, split, createHttpLink } from "@apollo/client";
+import { ApolloProvider, InMemoryCache, ApolloClient, createHttpLink } from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import Books from "./components/Books/Books";
 import Navbar from "./components/UI/Navbar/Navbar";
 import Hello from "./components/Hello/Hello";
 import { Route, Routes } from "react-router-dom";
-import { setContext } from "@apollo/client/link/context";
 import CreateBook from "./components/CreateBook/CreateBook";
 import Register from "./pages/Register/Register";
 import Login from "./pages/Login/Login";
 import "./App.css";
 
-// const token = localStorage.getItem("token");
+const httpLink = createHttpLink({
+  uri: "http://localhost:4000",
+});
 
-// const httpLink = createHttpLink({
-//   uri: "http://localhost:4000",
-// });
-
-// const authLink = setContext((_, { headers }) => {
-//   return {
-//     headers: {
-//       ...headers,
-//       authorization: token ? token : "",
-//     },
-//   };
-// });
-
-// const splitLink = split(authLink.concat(httpLink));
+const authLink = setContext((_, { headers }) => {
+  // get the authentication token from local storage if it exists
+  const token = localStorage.getItem("token");
+  // return the headers to the context so httpLink can read them
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? token : "",
+    },
+  };
+});
 
 const client = new ApolloClient({
-  uri: "http://localhost:4000",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 

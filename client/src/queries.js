@@ -45,3 +45,19 @@ export const LOGIN_USER = gql`
     }
   }
 `;
+
+export const LOGOUT_USER = gql`
+  mutation logout {
+    logout
+  }
+`;
+
+export const CURRENT_USER = gql`
+  query currentUser {
+    currentUser {
+      id
+      email
+      token
+    }
+  }
+`;

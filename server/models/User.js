@@ -42,6 +42,7 @@ UserSchema.methods.checkPassword = function (password) {
 };
 
 UserSchema.methods.generateToken = function () {
+  console.log(this.token);
   this.token = nanoid();
 };
 
